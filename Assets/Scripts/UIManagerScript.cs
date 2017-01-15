@@ -5,6 +5,7 @@ using System.Collections;
 public class UIManagerScript : MonoBehaviour {
 
 	public Animator startPanelAnimator;
+	public Animator mapsPanelAnimator;
 	public GameObject mapsPanel;
 
 	public void loadScene(string sceneName) {
@@ -13,6 +14,7 @@ public class UIManagerScript : MonoBehaviour {
 
 	public void openMaps() {
 		startPanelAnimator.SetBool("isHidden", true);
+		mapsPanelAnimator.SetBool("isHidden", false);
 		mapsPanel.SetActive(true);
 	}
 }
