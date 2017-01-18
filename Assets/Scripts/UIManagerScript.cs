@@ -4,22 +4,16 @@ using System.Collections;
 
 public class UIManagerScript : MonoBehaviour
 {
-	public GameObject mapsPanel;
 
-	void Start ()
-	{
-//		mapsPanel.SetActive (false);
-	}
+	public Animator uiAnimator;
 
 	public void loadScene (string sceneName)
 	{
 		SceneManager.LoadScene (sceneName);	
 	}
 
-	public void openMaps ()
+	public void openSelectMaps ()
 	{
-//		startPanelAnimator.SetBool ("isHidden", true);
-//		mapsPanel.SetActive (true);
-//		mapsPanelAnimator.SetBool ("isHidden", false);
+		uiAnimator.SetBool ("isSelectMapHidden", false);
 	}
 }
