@@ -21,4 +21,9 @@ public class UIManagerScript : MonoBehaviour
 	{
 		uiAnimator.SetBool ("isWoodMapHidden", false);
 	}
+
+	public void closeWoodMap ()
+	{
+		uiAnimator.SetBool ("isWoodMapHidden", true);
+	}
 }
