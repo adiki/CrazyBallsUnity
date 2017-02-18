@@ -7,12 +7,18 @@ public class UIManagerScript : MonoBehaviour
 
 	public Animator animator;
 
-	public void loadScene (string sceneName)
+	public void showLevelsPanel () 
 	{
-		SceneManager.LoadScene (sceneName);	
+		animator.SetBool ("isLevelsPanelHidden", false);
 	}
 
-	public void showLevelsPanel() {
-		animator.SetBool ("isLevelsPanelHidden", false);
+	public void openLevel(int level) 
+	{
+		loadScene ("Level" + level);
+	}
+
+	private void loadScene (string sceneName)
+	{
+		SceneManager.LoadScene (sceneName);	
 	}
 }
