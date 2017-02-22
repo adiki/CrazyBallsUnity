@@ -6,10 +6,10 @@ public abstract class Ball : MonoBehaviour
 {
 
 	public int id;
-	//	public Vector3 velocityCached;
+	public Vector3 velocityCached;
 	protected Rigidbody rigidBody;
 
-	//	private const float SIZE = 0.5f;
+	protected abstract Vector3 Movement ();
 
 	void Start ()
 	{
@@ -19,7 +19,7 @@ public abstract class Ball : MonoBehaviour
 	void FixedUpdate ()
 	{
 		if (rigidBody.position.y < -50) {
-			resetPosition ();
+			ResetPosition ();
 			return;
 		}
 
@@ -28,7 +28,7 @@ public abstract class Ball : MonoBehaviour
 		}
 
 		Move ();
-//		cacheVelocity ();
+		CacheVelocity ();
 	}
 
 	void Move ()
@@ -38,17 +38,43 @@ public abstract class Ball : MonoBehaviour
 		rigidBody.AddForce (movement, ForceMode.Impulse);
 	}
 
-	protected abstract Vector3 Movement ();
+	void OnCollisionEnter (Collision collision)
+	{
+		if (!collision.collider.gameObject.CompareTag ("Player")) {
+			return;
+		}
 
-	private void resetPosition ()
+		if (collision.contacts.Length == 0) {
+			return;
+		}
+
+		Vector3 normal = collision.contacts [0].normal;
+		Vector3 position = rigidBody.position;
+		position.y += 0.5f;
+
+		Ball otherPlayer = collision.collider.gameObject.GetComponent<Ball> ();
+		Vector3 velocityCachedOther = otherPlayer.velocityCached;
+		float angle = Vector3.Angle (-normal, velocityCachedOther);
+		float appliedRecoil = Mathf.Max (0, (angle / 180 - 0.5f)) * 2;
+
+		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 4;
+		rigidBody.AddForce (normal * appliedRecoil * factor, ForceMode.Impulse);
+	}
+
+	private void CacheVelocity ()
+	{
+		velocityCached = new Vector3 (rigidBody.velocity.x, 0, rigidBody.velocity.z);
+	}
+
+	private void ResetPosition ()
 	{
 		rigidBody.velocity = Vector3.zero;
 		if (id == 0) {
-			transform.position = new Vector3 (3, 1, 0);	
+			transform.position = new Vector3 (0, 1, 0);	
 		} else if (id == 1) {
-			transform.position = new Vector3 (0, 1, -3);	
+			transform.position = new Vector3 (3, 1, -2);	
 		} else if (id == 2) {
-			transform.position = new Vector3 (-3, 1, 0);	
+			transform.position = new Vector3 (-3, 1, -2);	
 		} else if (id == 3) {
 			transform.position = new Vector3 (0, 1, 3);	
 		}	
