@@ -4,10 +4,11 @@ using UnityEngine;
 
 public abstract class Ball : MonoBehaviour
 {
-
-	public int id;
+	public bool started;
 	public Vector3 velocityCached;
-	protected Rigidbody rigidBody;
+	public Rigidbody rigidBody;
+	public GameObject lastCollider;
+	public bool pointsAdded;
 
 	protected abstract Vector3 Movement ();
 
@@ -18,8 +19,8 @@ public abstract class Ball : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		if (rigidBody.position.y < -50) {
-			ResetPosition ();
+		if (!started)
+		{
 			return;
 		}
 
@@ -44,13 +45,13 @@ public abstract class Ball : MonoBehaviour
 			return;
 		}
 
+		lastCollider = collision.collider.gameObject;
+
 		if (collision.contacts.Length == 0) {
 			return;
 		}
 
 		Vector3 normal = collision.contacts [0].normal;
-		Vector3 position = rigidBody.position;
-		position.y += 0.5f;
 
 		Ball otherPlayer = collision.collider.gameObject.GetComponent<Ball> ();
 		Vector3 velocityCachedOther = otherPlayer.velocityCached;
@@ -64,19 +65,5 @@ public abstract class Ball : MonoBehaviour
 	private void CacheVelocity ()
 	{
 		velocityCached = new Vector3 (rigidBody.velocity.x, 0, rigidBody.velocity.z);
-	}
-
-	private void ResetPosition ()
-	{
-		rigidBody.velocity = Vector3.zero;
-		if (id == 0) {
-			transform.position = new Vector3 (0, 1, 0);	
-		} else if (id == 1) {
-			transform.position = new Vector3 (3, 1, -2);	
-		} else if (id == 2) {
-			transform.position = new Vector3 (-3, 1, -2);	
-		} else if (id == 3) {
-			transform.position = new Vector3 (0, 1, 3);	
-		}	
 	}
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Ball {
+public class Player : Ball
+{
 
-	protected override Vector3 Movement() {
+	protected override Vector3 Movement ()
+	{
 		float x, z;
 		float limit = 0.3f;
 		x = Input.acceleration.x;
