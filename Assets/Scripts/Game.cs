@@ -26,8 +26,6 @@ public class Game
 	public Ball enemy2Ball;
 	public Ball enemy3Ball;
 
-	public int playerPoints;
-
 	public Game (GameDelegate gameDelegate, GameObject player, GameObject enemy1, GameObject enemy2, GameObject enemy3)
 	{
 		this.gameDelegate = gameDelegate;
@@ -75,7 +73,7 @@ public class Game
 
 	private void CountPoints (Ball ball)
 	{
-		if (ball.transform.position.y > -2) {
+		if (ball.transform.position.y > -1) {
 			return;
 		}
 
@@ -85,15 +83,11 @@ public class Game
 
 		ball.pointsAdded = true;
 
-		if (ball.lastCollider.GetComponent<Ball> () != playerBall) {
-			return;
-		}
-
 		if (playerBall.transform.position.y < -0.1) {
 			return;
 		}
 
-		playerPoints += 1;
+		ball.lastCollider.GetComponent<Ball> ().points += 1;
 
 		gameDelegate.GameDidUpdatePoints (this);
 	}

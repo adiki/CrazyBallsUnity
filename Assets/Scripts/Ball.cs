@@ -10,6 +10,7 @@ public abstract class Ball : MonoBehaviour
 	public GameObject lastCollider;
 	public bool pointsAdded;
 	public float movementFactor = 2;
+	public int points;
 
 	protected abstract Vector3 Movement ();
 

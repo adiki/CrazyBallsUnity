@@ -32,7 +32,7 @@ public class RecordGame : MonoBehaviour, GameDelegate
 
 	public void GameDidUpdatePoints (Game game)
 	{
-		playerPoints.text = game.playerPoints.ToString ();
+		playerPoints.text = game.playerBall.points.ToString ();
 	}
 
 	public void GameDidResetBall (Game game, Ball ball)

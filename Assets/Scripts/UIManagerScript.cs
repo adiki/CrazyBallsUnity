@@ -17,11 +17,6 @@ public class UIManagerScript : MonoBehaviour
 		loadScene ("Level" + level);
 	}
 
-	public void openRecordMode ()
-	{
-		animator.SetBool ("isGameHidden", false);
-	}
-
 	private void loadScene (string sceneName)
 	{
 		SceneManager.LoadScene (sceneName);	
@@ -29,6 +24,5 @@ public class UIManagerScript : MonoBehaviour
 
 	public void AnimationDidFaded()
 	{
-		loadScene ("RecordMode");
 	}
 }
