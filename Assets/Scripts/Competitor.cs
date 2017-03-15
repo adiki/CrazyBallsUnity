@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Competitor : Ball
 {
-
 	private int counter;
 	private Vector3 movement;
 
@@ -17,27 +16,29 @@ public class Competitor : Ball
 		}
 
 		float factor = 1.5f;
-		float factorX = Random.Range (0.1f, 0.125f);
+
 		float x = rigidBody.position.x;
 		float z = rigidBody.position.z;
+
+		float factorX = Random.Range (0.1f, 0.15f);
 		if (x > factor) {
 			x = -factorX;
 		} else if (x < -factor) {
 			x = factorX;
 		} else {
-			x = Random.Range (0.075f, 0.125f) * Randomness.Sign ();
+			x = Random.Range (0.075f, 0.15f) * Randomness.Sign ();
 		}
-		float factorZ = Random.Range (0.1f, 0.125f);
+		float factorZ = Random.Range (0.1f, 0.15f);
 		if (z > factor) {
 			z = -factorZ;
 		} else if (z < -factor) {
 			z = factorZ;
 		} else {
-			z = Random.Range (0.075f, 0.125f) * Randomness.Sign ();
+			z = Random.Range (0.075f, 0.15f) * Randomness.Sign ();
 		}
 
 		movement = new Vector3 (x, 0.0f, z);
-		movement *= 2;
+		movement *= movementFactor;
 
 		return movement;
 	}

@@ -9,6 +9,7 @@ public abstract class Ball : MonoBehaviour
 	public Rigidbody rigidBody;
 	public GameObject lastCollider;
 	public bool pointsAdded;
+	public float movementFactor = 2;
 
 	protected abstract Vector3 Movement ();
 
@@ -58,7 +59,7 @@ public abstract class Ball : MonoBehaviour
 		float angle = Vector3.Angle (-normal, velocityCachedOther);
 		float appliedRecoil = Mathf.Max (0, (angle / 180 - 0.5f)) * 2;
 
-		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 4;
+		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 2;
 		rigidBody.AddForce (normal * appliedRecoil * factor, ForceMode.Impulse);
 	}
 

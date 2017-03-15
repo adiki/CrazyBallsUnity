@@ -20,11 +20,15 @@ public class UIManagerScript : MonoBehaviour
 	public void openRecordMode ()
 	{
 		animator.SetBool ("isGameHidden", false);
-		loadScene ("RecordMode");
 	}
 
 	private void loadScene (string sceneName)
 	{
 		SceneManager.LoadScene (sceneName);	
+	}
+
+	public void AnimationDidFaded()
+	{
+		loadScene ("RecordMode");
 	}
 }

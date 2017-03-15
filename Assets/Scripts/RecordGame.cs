@@ -30,7 +30,17 @@ public class RecordGame : MonoBehaviour, GameDelegate
 		timer.text = timerText;
 	}
 
-	public void GameDidUpdatePoints (Game game) {
+	public void GameDidUpdatePoints (Game game)
+	{
 		playerPoints.text = game.playerPoints.ToString ();
+	}
+
+	public void GameDidResetBall (Game game, Ball ball)
+	{
+		if (ball.rigidBody.mass < 1) {
+			ball.rigidBody.mass = Mathf.Min(ball.rigidBody.mass + 0.05f, 1);
+		} else {
+			ball.movementFactor = Mathf.Min (ball.movementFactor, 3);
+		}
 	}
 }

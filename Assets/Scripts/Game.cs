@@ -8,6 +8,8 @@ public interface GameDelegate
 	void GameDidUpdateTimer (Game game, string timerText);
 
 	void GameDidUpdatePoints (Game game);
+
+	void GameDidResetBall (Game game, Ball ball);
 }
 
 public class Game
@@ -15,7 +17,7 @@ public class Game
 
 	private GameDelegate gameDelegate;
 
-	private float timeLeftToStart = 4;
+	private float timeLeftToStart = 3.5f;
 
 	private bool started;
 
@@ -113,5 +115,9 @@ public class Game
 		} else if (ball == enemy3Ball) {
 			enemy3Ball.transform.position = new Vector3 (0, 1, 3);	
 		}	
+
+		if (ball != playerBall) {
+			gameDelegate.GameDidResetBall (this, ball);
+		}
 	}
 }
