@@ -1,18 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Ball : MonoBehaviour
 {
+	public Text pointsText;
+
 	public bool started;
 	public Vector3 velocityCached;
 	public Rigidbody rigidBody;
-	public GameObject lastCollider;
+	public List<GameObject> lastColliders = new List<GameObject>();
 	public bool pointsAdded;
 	public float movementFactor = 2;
-	public int points;
+
+	private int points;
 
 	protected abstract Vector3 Movement ();
+
+	public void AddPoint ()
+	{
+		points += 1;
+		pointsText.text = points.ToString ();
+	}
+
+	public void AddTwoPoints ()
+	{
+		points += 2;
+		pointsText.text = points.ToString ();
+	}
 
 	void Start ()
 	{
@@ -21,8 +37,7 @@ public abstract class Ball : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		if (!started)
-		{
+		if (!started) {
 			return;
 		}
 
@@ -47,7 +62,10 @@ public abstract class Ball : MonoBehaviour
 			return;
 		}
 
-		lastCollider = collision.collider.gameObject;
+		lastColliders.Add (collision.collider.gameObject);
+		if (lastColliders.Count > 2) {
+			lastColliders.RemoveAt (2);
+		}
 
 		if (collision.contacts.Length == 0) {
 			return;

@@ -85,13 +85,19 @@ public class Game
 
 		ball.pointsAdded = true;
 
-		if (playerBall.transform.position.y < -0.1) {
+		if (ball.lastColliders.Count == 0) {
 			return;
 		}
 
-		ball.lastCollider.GetComponent<Ball> ().points += 1;
+		Ball lastColliderBall = ball.lastColliders[0].GetComponent<Ball> ();
 
-		gameDelegate.GameDidUpdatePoints (this);
+		if (lastColliderBall.transform.position.y > -0.1) {
+			lastColliderBall.AddPoint ();
+			gameDelegate.GameDidUpdatePoints (this);
+		} else if (ball.lastColliders.Count == 2) {
+			Ball previousLastColliderBall = ball.lastColliders[1].GetComponent<Ball> ();
+			lastColliderBall.AddTwoPoints ();
+		}
 	}
 
 	private void ResetPositionsIfNeeded (Ball ball)
@@ -103,6 +109,8 @@ public class Game
 		ball.rigidBody.velocity = Vector3.zero;
 
 		ball.pointsAdded = false;
+
+		ball.lastColliders.Clear (); 
 
 		if (ball == playerBall) { 
 			playerBall.transform.position = new Vector3 (0, 1, 0);	
