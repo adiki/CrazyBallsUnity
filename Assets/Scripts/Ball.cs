@@ -11,7 +11,6 @@ public abstract class Ball : MonoBehaviour
 	public Vector3 velocityCached;
 	public Rigidbody rigidBody;
 	public List<GameObject> lastColliders = new List<GameObject>();
-	public bool pointsAdded;
 	public float movementFactor = 2;
 
 	private int points;
@@ -21,12 +20,6 @@ public abstract class Ball : MonoBehaviour
 	public void AddPoint ()
 	{
 		points += 1;
-		pointsText.text = points.ToString ();
-	}
-
-	public void AddTwoPoints ()
-	{
-		points += 2;
 		pointsText.text = points.ToString ();
 	}
 
@@ -62,9 +55,9 @@ public abstract class Ball : MonoBehaviour
 			return;
 		}
 
-		lastColliders.Add (collision.collider.gameObject);
-		if (lastColliders.Count > 2) {
-			lastColliders.RemoveAt (2);
+		lastColliders.Insert (0, collision.collider.gameObject);
+		if (lastColliders.Count > 1) {
+			lastColliders.RemoveAt (1);
 		}
 
 		if (collision.contacts.Length == 0) {

@@ -79,12 +79,6 @@ public class Game
 			return;
 		}
 
-		if (ball.pointsAdded) {
-			return;
-		}
-
-		ball.pointsAdded = true;
-
 		if (ball.lastColliders.Count == 0) {
 			return;
 		}
@@ -92,11 +86,10 @@ public class Game
 		Ball lastColliderBall = ball.lastColliders[0].GetComponent<Ball> ();
 
 		if (lastColliderBall.transform.position.y > -0.1) {
+			ball.lastColliders.Clear ();
+			lastColliderBall.lastColliders.Clear ();
 			lastColliderBall.AddPoint ();
 			gameDelegate.GameDidUpdatePoints (this);
-		} else if (ball.lastColliders.Count == 2) {
-			Ball previousLastColliderBall = ball.lastColliders[1].GetComponent<Ball> ();
-			lastColliderBall.AddTwoPoints ();
 		}
 	}
 
@@ -107,10 +100,6 @@ public class Game
 		}
 
 		ball.rigidBody.velocity = Vector3.zero;
-
-		ball.pointsAdded = false;
-
-		ball.lastColliders.Clear (); 
 
 		if (ball == playerBall) { 
 			playerBall.transform.position = new Vector3 (0, 1, 0);	
