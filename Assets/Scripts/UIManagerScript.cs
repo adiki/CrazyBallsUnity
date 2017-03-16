@@ -7,6 +7,8 @@ public class UIManagerScript : MonoBehaviour
 
 	public Animator animator;
 
+	private int levelToOpen;
+
 	public void showLevelsPanel ()
 	{
 		animator.SetBool ("isLevelsPanelHidden", false);
@@ -14,7 +16,8 @@ public class UIManagerScript : MonoBehaviour
 
 	public void openLevel (int level)
 	{
-		loadScene ("Level" + level);
+		animator.SetBool ("isGameHidden", false);
+		levelToOpen = level;
 	}
 
 	private void loadScene (string sceneName)
@@ -24,5 +27,6 @@ public class UIManagerScript : MonoBehaviour
 
 	public void AnimationDidFaded()
 	{
+		loadScene ("Level" + levelToOpen);
 	}
 }

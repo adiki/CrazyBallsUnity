@@ -62,10 +62,12 @@ public class Game
 	private void CountPointsAndResetPositionsIfNeeded ()
 	{
 
+		CountPoints (playerBall);
 		CountPoints (enemy1Ball);
 		CountPoints (enemy2Ball);
 		CountPoints (enemy3Ball);
 
+		ResetPositionsIfNeeded (playerBall);
 		ResetPositionsIfNeeded (enemy1Ball);
 		ResetPositionsIfNeeded (enemy2Ball);
 		ResetPositionsIfNeeded (enemy3Ball);
@@ -102,7 +104,9 @@ public class Game
 
 		ball.pointsAdded = false;
 
-		if (ball == enemy1Ball) {
+		if (ball == playerBall) { 
+			playerBall.transform.position = new Vector3 (0, 1, 0);	
+		} else if (ball == enemy1Ball) {
 			enemy1Ball.transform.position = new Vector3 (3, 1, -2);	
 		} else if (ball == enemy2Ball) {
 			enemy2Ball.transform.position = new Vector3 (-3, 1, -2);	
@@ -110,8 +114,6 @@ public class Game
 			enemy3Ball.transform.position = new Vector3 (0, 1, 3);	
 		}	
 
-		if (ball != playerBall) {
-			gameDelegate.GameDidResetBall (this, ball);
-		}
+		gameDelegate.GameDidResetBall (this, ball);
 	}
 }

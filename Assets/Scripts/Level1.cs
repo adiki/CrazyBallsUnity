@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RecordGame : MonoBehaviour, GameDelegate
+public class Level1 : MonoBehaviour, GameDelegate
 {
+
 	public Text timer;
-	public Text playerPoints;
 
 	public GameObject player;
 	public GameObject enemy1;
@@ -32,15 +32,9 @@ public class RecordGame : MonoBehaviour, GameDelegate
 
 	public void GameDidUpdatePoints (Game game)
 	{
-		playerPoints.text = game.playerBall.points.ToString ();
 	}
 
 	public void GameDidResetBall (Game game, Ball ball)
 	{
-		if (ball.rigidBody.mass < 1) {
-			ball.rigidBody.mass = Mathf.Min(ball.rigidBody.mass + 0.05f, 1);
-		} else {
-			ball.movementFactor = Mathf.Min (ball.movementFactor, 3);
-		}
 	}
 }
