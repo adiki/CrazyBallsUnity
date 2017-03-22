@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class Level1 : MonoBehaviour, GameDelegate
 {
 
-	public Text timer;
+	public Text startTimer;
+	public Text gameTimer;
 
 	public GameObject player;
 	public GameObject enemy1;
@@ -17,7 +18,8 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	void Start ()
 	{
-		game = new Game (this, player, enemy1, enemy2, enemy3);
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+		game = new Game (this, 60, player, enemy1, enemy2, enemy3);
 	}
 
 	void FixedUpdate ()
@@ -25,9 +27,14 @@ public class Level1 : MonoBehaviour, GameDelegate
 		game.Update ();
 	}
 
-	public void GameDidUpdateTimer (Game game, string timerText)
+	public void GameDidUpdateStartTimer (Game game, string startTimerText)
 	{
-		timer.text = timerText;
+		startTimer.text = startTimerText;
+	}
+
+	public void GameDidUpdateGameTimer (Game game, string gameTimerText)
+	{
+		gameTimer.text = gameTimerText;
 	}
 
 	public void GameDidUpdatePoints (Game game)

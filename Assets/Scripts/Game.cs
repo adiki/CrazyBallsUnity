@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public interface GameDelegate
 {
-	void GameDidUpdateTimer (Game game, string timerText);
+	void GameDidUpdateStartTimer (Game game, string startTimerText);
+
+	void GameDidUpdateGameTimer (Game game, string gameTimerText);
 
 	void GameDidUpdatePoints (Game game);
 
@@ -19,6 +21,8 @@ public class Game
 
 	private float timeLeftToStart = 3.5f;
 
+	private float gameTime;
+
 	private bool started;
 
 	public Ball playerBall;
@@ -26,9 +30,10 @@ public class Game
 	public Ball enemy2Ball;
 	public Ball enemy3Ball;
 
-	public Game (GameDelegate gameDelegate, GameObject player, GameObject enemy1, GameObject enemy2, GameObject enemy3)
+	public Game (GameDelegate gameDelegate, float gameTime, GameObject player, GameObject enemy1, GameObject enemy2, GameObject enemy3)
 	{
 		this.gameDelegate = gameDelegate;
+		this.gameTime = gameTime;
 		playerBall = player.GetComponent<Ball> ();
 		enemy1Ball = enemy1.GetComponent<Ball> ();
 		enemy2Ball = enemy2.GetComponent<Ball> ();
@@ -40,11 +45,14 @@ public class Game
 		timeLeftToStart -= Time.deltaTime;
 		if (!started) {
 			if (timeLeftToStart > 0) {
-				gameDelegate.GameDidUpdateTimer (this, Mathf.Min (Mathf.Ceil (timeLeftToStart), 3).ToString ());
+				gameDelegate.GameDidUpdateStartTimer (this, Mathf.Min (Mathf.Ceil (timeLeftToStart), 3).ToString ());
 			} else {
-				gameDelegate.GameDidUpdateTimer (this, "");
+				gameDelegate.GameDidUpdateStartTimer (this, "");
 				Start ();
 			}
+		} else {
+			gameTime -= Time.deltaTime;
+			gameDelegate.GameDidUpdateGameTimer (this, GameTimeString ());
 		}
 
 		CountPointsAndResetPositionsIfNeeded ();
@@ -83,7 +91,7 @@ public class Game
 			return;
 		}
 
-		Ball lastColliderBall = ball.lastColliders[0].GetComponent<Ball> ();
+		Ball lastColliderBall = ball.lastColliders [0].GetComponent<Ball> ();
 
 		if (lastColliderBall.transform.position.y > -0.1) {
 			ball.lastColliders.Clear ();
@@ -112,5 +120,19 @@ public class Game
 		}	
 
 		gameDelegate.GameDidResetBall (this, ball);
+	}
+
+	private string GameTimeString ()
+	{
+		int minutes = Mathf.Max ((int)gameTime / 60, 0);
+		int seconds = Mathf.Max ((int)gameTime % 60, 0);
+
+		string delimeter;
+		if (seconds < 10) {
+			delimeter = ":0";
+		} else {
+			delimeter = ":";
+		}
+		return minutes.ToString () + delimeter + seconds.ToString ();
 	}
 }

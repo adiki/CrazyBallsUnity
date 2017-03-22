@@ -71,7 +71,7 @@ public abstract class Ball : MonoBehaviour
 		float angle = Vector3.Angle (-normal, velocityCachedOther);
 		float appliedRecoil = Mathf.Max (0, (angle / 180 - 0.5f)) * 2;
 
-		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 2;
+		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 3;
 		rigidBody.AddForce (normal * appliedRecoil * factor, ForceMode.Impulse);
 	}
 
