@@ -27,6 +27,18 @@ public class Level1 : MonoBehaviour, GameDelegate
 		game.Update ();
 	}
 
+	void OnApplicationPause (bool paused)
+	{
+		if (!paused) {
+			game.Paused = true;
+		}
+	}
+
+	public void SwitchPause ()
+	{
+		game.Paused = !game.Paused;
+	}
+
 	public void GameDidUpdateStartTimer (Game game, string startTimerText)
 	{
 		startTimer.text = startTimerText;

@@ -16,6 +16,22 @@ public interface GameDelegate
 
 public class Game
 {
+	public Ball playerBall;
+	public Ball enemy1Ball;
+	public Ball enemy2Ball;
+	public Ball enemy3Ball;
+
+	public bool Paused 
+	{
+		get { return Time.timeScale == 0; }
+		set { 
+			if (value) {
+				Time.timeScale = 0;
+			} else {
+				Time.timeScale = 1;
+			}
+		}
+	}
 
 	private GameDelegate gameDelegate;
 
@@ -24,11 +40,6 @@ public class Game
 	private float gameTime;
 
 	private bool started;
-
-	public Ball playerBall;
-	public Ball enemy1Ball;
-	public Ball enemy2Ball;
-	public Ball enemy3Ball;
 
 	public Game (GameDelegate gameDelegate, float gameTime, GameObject player, GameObject enemy1, GameObject enemy2, GameObject enemy3)
 	{
