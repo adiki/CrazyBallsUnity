@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public abstract class Ball : MonoBehaviour
 	public bool started;
 	public Vector3 velocityCached;
 	public Rigidbody rigidBody;
-	public List<GameObject> lastColliders = new List<GameObject>();
+	public List<Hit> lastHits = new List<Hit>();
 	public float movementFactor = 2;
 
 	private int points;
@@ -55,9 +56,11 @@ public abstract class Ball : MonoBehaviour
 			return;
 		}
 
-		lastColliders.Insert (0, collision.collider.gameObject);
-		if (lastColliders.Count > 1) {
-			lastColliders.RemoveAt (1);
+		Ball otherPlayer = collision.collider.gameObject.GetComponent<Ball> ();
+
+		lastHits.Insert (0, new Hit(otherPlayer, DateTime.Now));
+		if (lastHits.Count > 2) {
+			lastHits.RemoveAt (2);
 		}
 
 		if (collision.contacts.Length == 0) {
@@ -66,7 +69,6 @@ public abstract class Ball : MonoBehaviour
 
 		Vector3 normal = collision.contacts [0].normal;
 
-		Ball otherPlayer = collision.collider.gameObject.GetComponent<Ball> ();
 		Vector3 velocityCachedOther = otherPlayer.velocityCached;
 		float angle = Vector3.Angle (-normal, velocityCachedOther);
 		float appliedRecoil = Mathf.Max (0, (angle / 180 - 0.5f)) * 2;

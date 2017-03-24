@@ -29,7 +29,7 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	void OnApplicationPause (bool paused)
 	{
-		if (!paused) {
+		if (!paused && game != null) {
 			game.Paused = true;
 		}
 	}

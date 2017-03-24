@@ -21,8 +21,7 @@ public class Game
 	public Ball enemy2Ball;
 	public Ball enemy3Ball;
 
-	public bool Paused 
-	{
+	public bool Paused {
 		get { return Time.timeScale == 0; }
 		set { 
 			if (value) {
@@ -94,22 +93,59 @@ public class Game
 
 	private void CountPoints (Ball ball)
 	{
-		if (ball.transform.position.y > -1) {
+		if (ball.transform.position.y > -2) {
 			return;
 		}
 
-		if (ball.lastColliders.Count == 0) {
+		if (ball.lastHits.Count == 0) {
 			return;
 		}
 
-		Ball lastColliderBall = ball.lastColliders [0].GetComponent<Ball> ();
+		Ball lastColliderBall = ball.lastHits [0].collider.GetComponent<Ball> ();
 
 		if (lastColliderBall.transform.position.y > -0.1) {
-			ball.lastColliders.Clear ();
-			lastColliderBall.lastColliders.Clear ();
 			lastColliderBall.AddPoint ();
 			gameDelegate.GameDidUpdatePoints (this);
+
+			int index = lastColliderBall.lastHits.FindIndex (hit => hit.collider == ball);
+			if (index != -1) {
+				lastColliderBall.lastHits.RemoveAt (index);
+			}
+		} else {
+			Ball secondLastColliderBall;
+			if (ball.lastHits.Count > 1 && lastColliderBall.lastHits.Count > 1) {
+				if (ball.lastHits [1].time > lastColliderBall.lastHits [1].time) {
+					secondLastColliderBall = ball.lastHits [1].collider;	
+				} else {
+					secondLastColliderBall = lastColliderBall.lastHits [1].collider;
+				}
+			} else if (ball.lastHits.Count > 1) {
+				secondLastColliderBall = ball.lastHits [1].collider;
+			} else if (lastColliderBall.lastHits.Count > 1) {
+				secondLastColliderBall = lastColliderBall.lastHits [1].collider;
+			} else {
+				return;
+			}
+
+			if (secondLastColliderBall.transform.position.y > -0.1) {
+				secondLastColliderBall.AddPoint ();
+				secondLastColliderBall.AddPoint ();
+			}
+
+			int ballIndex = secondLastColliderBall.lastHits.FindIndex (hit => hit.collider == ball);
+			if (ballIndex != -1) {
+				secondLastColliderBall.lastHits.RemoveAt (ballIndex);
+			}
+
+			int lastBallIndex = secondLastColliderBall.lastHits.FindIndex (hit => hit.collider == lastColliderBall);
+			if (lastBallIndex != -1) {
+				secondLastColliderBall.lastHits.RemoveAt (lastBallIndex);
+			}
+
+			lastColliderBall.lastHits.Clear ();
 		}
+
+		ball.lastHits.Clear ();
 	}
 
 	private void ResetPositionsIfNeeded (Ball ball)
