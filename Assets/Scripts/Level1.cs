@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Level1 : MonoBehaviour, GameDelegate
 {
+
+	public Animator animator;
 
 	public Text startTimer;
 	public Text gameTimer;
@@ -29,14 +33,28 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	void OnApplicationPause (bool paused)
 	{
-		if (!paused && game != null) {
-			game.Paused = true;
+		if (game == null) {
+			return;
 		}
+
+		game.Paused = true;
+		animator.SetBool ("isPausePanelHidden", false);
 	}
 
-	public void SwitchPause ()
+	public void PauseGame ()
 	{
-		game.Paused = !game.Paused;
+		game.Paused = true;
+		animator.SetBool ("isPausePanelHidden", false);
+	}
+
+	public void ResumeGame ()
+	{
+		animator.SetBool ("isPausePanelHidden", true);
+		StartCoroutine (UnpauseGame ());
+	}
+
+	public void OpenMenu ()
+	{
 	}
 
 	public void GameDidUpdateStartTimer (Game game, string startTimerText)
@@ -55,5 +73,15 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	public void GameDidResetBall (Game game, Ball ball)
 	{
+	}
+
+	IEnumerator UnpauseGame ()
+	{
+		float pauseEndTime = Time.realtimeSinceStartup + 0.5f;
+		while (Time.realtimeSinceStartup < pauseEndTime) {
+			yield return 0;
+		}
+
+		game.Paused = false;
 	}
 }
