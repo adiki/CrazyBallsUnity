@@ -56,7 +56,7 @@ public class Level1 : MonoBehaviour, GameDelegate
 	public void OpenMenu ()
 	{
 		game.Paused = false;
-		SceneManager.LoadScene ("MapScreen");
+		animator.SetBool ("isGameHidden", true);
 	}
 
 	public void GameDidUpdateStartTimer (Game game, string startTimerText)
@@ -85,5 +85,10 @@ public class Level1 : MonoBehaviour, GameDelegate
 		}
 
 		game.Paused = false;
+	}
+
+	public void AnimationDidFaded()
+	{
+		SceneManager.LoadScene ("MapScreen");
 	}
 }
