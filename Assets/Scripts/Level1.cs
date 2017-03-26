@@ -55,6 +55,8 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	public void OpenMenu ()
 	{
+		game.Paused = false;
+		SceneManager.LoadScene ("MapScreen");
 	}
 
 	public void GameDidUpdateStartTimer (Game game, string startTimerText)
