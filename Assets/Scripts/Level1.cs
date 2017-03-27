@@ -24,6 +24,8 @@ public class Level1 : MonoBehaviour, GameDelegate
 	private Vector3 firstPosition;
 	private List<GameObject> resultsPositions = new List<GameObject> ();
 
+	private bool replay;
+
 	void Start ()
 	{
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -76,6 +78,12 @@ public class Level1 : MonoBehaviour, GameDelegate
 		animator.SetBool ("isGameHidden", true);
 	}
 
+	public void ReplayGame ()
+	{
+		replay = true;
+		animator.SetBool ("isGameHidden", true);
+	}
+
 	public void GameDidUpdateStartTimer (Game game, string startTimerText)
 	{
 		startTimer.text = startTimerText;
@@ -95,6 +103,11 @@ public class Level1 : MonoBehaviour, GameDelegate
 	{
 	}
 
+	public void GameDidFinishGame (Game game) 
+	{
+		animator.SetBool ("isFinishPanelHidden", false);
+	}
+
 	IEnumerator UnpauseGame ()
 	{
 		float pauseEndTime = Time.realtimeSinceStartup + 0.5f;
@@ -107,6 +120,10 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	public void AnimationDidFaded ()
 	{
-		SceneManager.LoadScene ("MapScreen");
+		if (replay) {
+			SceneManager.LoadScene ("Level1");
+		} else {
+			SceneManager.LoadScene ("MapScreen");
+		}
 	}
 }

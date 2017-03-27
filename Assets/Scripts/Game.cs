@@ -12,6 +12,8 @@ public interface GameDelegate
 	void GameDidUpdatePoints (Game game);
 
 	void GameDidResetBall (Game game, Ball ball);
+
+	void GameDidFinishGame (Game game);
 }
 
 public class Game
@@ -39,6 +41,7 @@ public class Game
 	private float gameTime;
 
 	private bool started;
+	private bool finished = false;
 
 	public Game (GameDelegate gameDelegate, float gameTime, GameObject player, GameObject enemy1, GameObject enemy2, GameObject enemy3)
 	{
@@ -52,6 +55,10 @@ public class Game
 
 	public void Update ()
 	{
+		if (finished) {
+			return;
+		}
+
 		timeLeftToStart -= Time.deltaTime;
 		if (!started) {
 			if (timeLeftToStart > 0) {
@@ -63,6 +70,11 @@ public class Game
 		} else {
 			gameTime -= Time.deltaTime;
 			gameDelegate.GameDidUpdateGameTimer (this, GameTimeString ());
+
+			if (gameTime < 0) {
+				finished = true;
+				gameDelegate.GameDidFinishGame (this);
+			}
 		}
 
 		CountPointsAndResetPositionsIfNeeded ();
