@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public abstract class Ball : MonoBehaviour
 {
 	public Text pointsText;
+	public GameObject resultPanel;
 
 	public bool started;
 	public Vector3 velocityCached;
@@ -14,7 +15,7 @@ public abstract class Ball : MonoBehaviour
 	public List<Hit> lastHits = new List<Hit>();
 	public float movementFactor = 2;
 
-	private int points;
+	public int points;
 
 	protected abstract Vector3 Movement ();
 

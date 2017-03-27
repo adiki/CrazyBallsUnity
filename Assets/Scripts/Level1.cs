@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,15 +21,31 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	private Game game;
 
+	private Vector3 firstPosition;
+	private List<GameObject> resultsPositions = new List<GameObject> ();
+
 	void Start ()
 	{
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+		firstPosition = player.GetComponent<Ball> ().resultPanel.transform.position;
+
+		resultsPositions.Add (player);
+		resultsPositions.Add (enemy1);
+		resultsPositions.Add (enemy2);
+		resultsPositions.Add (enemy3);
 		game = new Game (this, 60, player, enemy1, enemy2, enemy3);
 	}
 
 	void FixedUpdate ()
 	{
 		game.Update ();
+
+		for (int i = 0; i < resultsPositions.Count; ++i) {
+			resultsPositions [i].GetComponent<Ball> ().resultPanel.transform.position = Vector3.Lerp (resultsPositions [i].GetComponent<Ball> ().resultPanel.transform.position, 
+				new Vector3 (firstPosition.x, -90 * i + firstPosition.y, firstPosition.z),
+				5f * Time.deltaTime);
+		}
 	}
 
 	void OnApplicationPause (bool paused)
@@ -71,6 +88,7 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	public void GameDidUpdatePoints (Game game)
 	{
+		resultsPositions = resultsPositions.OrderByDescending (ball => ball.GetComponent<Ball> ().points).ToList ();
 	}
 
 	public void GameDidResetBall (Game game, Ball ball)
@@ -87,7 +105,7 @@ public class Level1 : MonoBehaviour, GameDelegate
 		game.Paused = false;
 	}
 
-	public void AnimationDidFaded()
+	public void AnimationDidFaded ()
 	{
 		SceneManager.LoadScene ("MapScreen");
 	}
