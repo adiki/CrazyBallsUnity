@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,8 @@ public class Game
 	public Ball enemy1Ball;
 	public Ball enemy2Ball;
 	public Ball enemy3Ball;
+
+	private List<Ball> balls = new List<Ball> ();
 
 	public bool Paused {
 		get { return Time.timeScale == 0; }
@@ -51,6 +54,11 @@ public class Game
 		enemy1Ball = enemy1.GetComponent<Ball> ();
 		enemy2Ball = enemy2.GetComponent<Ball> ();
 		enemy3Ball = enemy3.GetComponent<Ball> ();
+
+		balls.Add (playerBall);
+		balls.Add (enemy1Ball);
+		balls.Add (enemy2Ball);
+		balls.Add (enemy3Ball);
 	}
 
 	public void Update ()
@@ -72,8 +80,13 @@ public class Game
 			gameDelegate.GameDidUpdateGameTimer (this, GameTimeString ());
 
 			if (gameTime < 0) {
-				finished = true;
-				gameDelegate.GameDidFinishGame (this);
+
+				balls = balls.OrderByDescending (ball => ball.points).ToList ();
+
+				if (balls [0].points > balls [1].points) {
+					finished = true;
+					gameDelegate.GameDidFinishGame (this);
+				}
 			}
 		}
 
