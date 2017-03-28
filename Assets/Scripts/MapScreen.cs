@@ -19,7 +19,14 @@ public class MapScreen : MonoBehaviour
 
 		for (int i = 2; i <= 15; ++i) {
 			Button button = GameObject.FindGameObjectWithTag (i.ToString ()).GetComponent<Button> ();
-			button.interactable =  i <= DataStore.unlockedLevelNumber ();
+			button.interactable = i <= DataStore.unlockedLevelNumber ();
+		}
+
+		for (int i = 1; i <= 1; ++i) {
+			for (int j = 1; j <= DataStore.starsForLevel (i); ++j) {
+				Image startImage = GameObject.FindGameObjectWithTag (i + "star" + j).GetComponent<Image> ();
+				startImage.color = new Color(1f, 0.6f, 0f, 1f);
+			}
 		}
 	}
 

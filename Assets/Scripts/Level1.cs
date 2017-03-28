@@ -56,6 +56,8 @@ public class Level1 : MonoBehaviour, GameDelegate
 				new Vector3 (firstPosition.x, -90 * i + firstPosition.y, firstPosition.z),
 				5f * Time.deltaTime);
 		}
+
+		resultsPositions = resultsPositions.OrderByDescending (ball => ball.GetComponent<Ball> ().points).ToList ();
 	}
 
 	void OnApplicationPause (bool paused)
@@ -104,7 +106,6 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	public void GameDidUpdatePoints (Game game)
 	{
-		resultsPositions = resultsPositions.OrderByDescending (ball => ball.GetComponent<Ball> ().points).ToList ();
 	}
 
 	public void GameDidResetBall (Game game, Ball ball)
@@ -119,16 +120,20 @@ public class Level1 : MonoBehaviour, GameDelegate
 			DataStore.bumpLevel ();
 		}
 
+		int starsNumber = 0;
 		if (game.playerBall.points >= 5) {
 			star1.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
+			++starsNumber;
 		}
 		if (game.playerBall.points >= 10) {
 			star2.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
+			++starsNumber;
 		}
 		if (game.playerBall.points >= 15) {
 			star3.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
+			++starsNumber;
 		}
-
+		DataStore.updateStarsForLevel (levelNumber, starsNumber);
 		nextButton.interactable = DataStore.unlockedLevelNumber () > levelNumber;
 		animator.SetBool ("isFinishPanelHidden", false);
 	}
