@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Level1 : MonoBehaviour, GameDelegate
-{
+public abstract class Level : MonoBehaviour, GameDelegate {
+
+	public int levelNumber;
 
 	public Animator animator;
 
@@ -25,14 +25,13 @@ public class Level1 : MonoBehaviour, GameDelegate
 	public GameObject enemy2;
 	public GameObject enemy3;
 
-	private int levelNumber = 1;
-
 	private Game game;
 
 	private Vector3 firstPosition;
 	private List<GameObject> resultsPositions = new List<GameObject> ();
 
 	private bool replay;
+	private bool next;
 
 	void Start ()
 	{
@@ -49,15 +48,16 @@ public class Level1 : MonoBehaviour, GameDelegate
 
 	void FixedUpdate ()
 	{
+
 		game.Update ();
+
+		resultsPositions = resultsPositions.OrderByDescending (ball => ball.GetComponent<Ball> ().points).ToList ();
 
 		for (int i = 0; i < resultsPositions.Count; ++i) {
 			resultsPositions [i].GetComponent<Ball> ().resultPanel.transform.position = Vector3.Lerp (resultsPositions [i].GetComponent<Ball> ().resultPanel.transform.position, 
 				new Vector3 (firstPosition.x, -90 * i + firstPosition.y, firstPosition.z),
 				5f * Time.deltaTime);
 		}
-
-		resultsPositions = resultsPositions.OrderByDescending (ball => ball.GetComponent<Ball> ().points).ToList ();
 	}
 
 	void OnApplicationPause (bool paused)
@@ -91,6 +91,12 @@ public class Level1 : MonoBehaviour, GameDelegate
 	public void ReplayGame ()
 	{
 		replay = true;
+		animator.SetBool ("isGameHidden", true);
+	}
+
+	public void OpenNext ()
+	{
+		next = true;
 		animator.SetBool ("isGameHidden", true);
 	}
 
@@ -152,6 +158,9 @@ public class Level1 : MonoBehaviour, GameDelegate
 	{
 		if (replay) {
 			SceneManager.LoadScene ("Level" + levelNumber);
+		} else if (next) {
+			int nextLevel = levelNumber + 1;
+			SceneManager.LoadScene ("Level" + nextLevel);
 		} else {
 			SceneManager.LoadScene ("MapScreen");
 		}
