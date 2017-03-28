@@ -14,10 +14,18 @@ public class Level1 : MonoBehaviour, GameDelegate
 	public Text startTimer;
 	public Text gameTimer;
 
+	public GameObject star1;
+	public GameObject star2;
+	public GameObject star3;
+	public GameObject tryAgain;
+	public Button nextButton;
+
 	public GameObject player;
 	public GameObject enemy1;
 	public GameObject enemy2;
 	public GameObject enemy3;
+
+	private int levelNumber = 1;
 
 	private Game game;
 
@@ -103,8 +111,25 @@ public class Level1 : MonoBehaviour, GameDelegate
 	{
 	}
 
-	public void GameDidFinishGame (Game game) 
+	public void GameDidFinishGame (Game game)
 	{
+		tryAgain.SetActive (!game.didPlayerWin ());
+
+		if (game.didPlayerWin () && DataStore.unlockedLevelNumber () == levelNumber) {
+			DataStore.bumpLevel ();
+		}
+
+		if (game.playerBall.points >= 5) {
+			star1.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
+		}
+		if (game.playerBall.points >= 10) {
+			star2.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
+		}
+		if (game.playerBall.points >= 15) {
+			star3.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
+		}
+
+		nextButton.interactable = DataStore.unlockedLevelNumber () > levelNumber;
 		animator.SetBool ("isFinishPanelHidden", false);
 	}
 
@@ -121,9 +146,31 @@ public class Level1 : MonoBehaviour, GameDelegate
 	public void AnimationDidFaded ()
 	{
 		if (replay) {
-			SceneManager.LoadScene ("Level1");
+			SceneManager.LoadScene ("Level" + levelNumber);
 		} else {
 			SceneManager.LoadScene ("MapScreen");
 		}
+	}
+
+	public void FinishPanelDidAppear ()
+	{
+		Invoke ("activateStar1", 0.5f);
+		Invoke ("activateStar2", 1);
+		Invoke ("activateStar3", 1.5f);
+	}
+
+	private void activateStar1() 
+	{
+		star1.SetActive (game.didPlayerWin ());
+	}
+
+	private void activateStar2() 
+	{
+		star2.SetActive (game.didPlayerWin ());
+	}
+
+	private void activateStar3() 
+	{
+		star3.SetActive (game.didPlayerWin ());
 	}
 }

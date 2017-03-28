@@ -61,6 +61,12 @@ public class Game
 		balls.Add (enemy3Ball);
 	}
 
+	public bool didPlayerWin() 
+	{
+		balls = balls.OrderByDescending (ball => ball.points).ToList ();
+		return balls [0] == playerBall;
+	}
+
 	public void Update ()
 	{
 		if (finished) {
