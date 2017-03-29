@@ -25,7 +25,7 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 	public GameObject enemy2;
 	public GameObject enemy3;
 
-	private Game game;
+	protected Game game;
 
 	private Vector3 firstPosition;
 	private List<GameObject> resultsPositions = new List<GameObject> ();
@@ -43,8 +43,14 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 		resultsPositions.Add (enemy1);
 		resultsPositions.Add (enemy2);
 		resultsPositions.Add (enemy3);
-		game = new Game (this, 60, player, enemy1, enemy2, enemy3);
+
+		game = new Game (this, gameTime (), player, enemy1, enemy2, enemy3);
 	}
+
+	protected abstract int gameTime ();
+	protected abstract int pointsForStar1 ();
+	protected abstract int pointsForStar2 ();
+	protected abstract int pointsForStar3 ();
 
 	void FixedUpdate ()
 	{
@@ -127,15 +133,15 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 		}
 
 		int starsNumber = 0;
-		if (game.playerBall.points >= 5) {
+		if (game.playerBall.points >= pointsForStar1 ()) {
 			star1.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
 			++starsNumber;
 		}
-		if (game.playerBall.points >= 10) {
+		if (game.playerBall.points >= pointsForStar2 ()) {
 			star2.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
 			++starsNumber;
 		}
-		if (game.playerBall.points >= 15) {
+		if (game.playerBall.points >= pointsForStar3 ()) {
 			star3.GetComponent<Image>().color = new Color(1f, 0.6f, 0f, 1f);
 			++starsNumber;
 		}
