@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level2 : Level
+public class OneMinuteLevel : Level
 {
 }
