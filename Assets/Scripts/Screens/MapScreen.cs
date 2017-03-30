@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class MapScreen : MonoBehaviour
 {
-
-	public GameObject content;
 	public Animator animator;
 	public GameObject scrollView;
 	public GameObject scrollViewContentView;
@@ -36,7 +34,7 @@ public class MapScreen : MonoBehaviour
 			Rect rect = scrollViewContentView.GetComponent<RectTransform> ().rect;
 			scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (x, 0, 0);
 		} else {
-			content.transform.Translate (new Vector3 (positionX, 0, 0));
+			scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (positionX, 0, 0);
 		}
 	}
 
@@ -53,7 +51,7 @@ public class MapScreen : MonoBehaviour
 	public void openLevel (int level)
 	{
 		animator.SetBool ("isGameHidden", false);
-		positionX = content.transform.transform.position.x;
+		positionX = scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition.x;
 		levelToOpen = level;
 	}
 
