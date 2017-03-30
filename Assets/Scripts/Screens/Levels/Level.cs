@@ -28,6 +28,7 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 	protected Game game;
 
 	private Vector3 firstPosition;
+	private float positionsSpace;
 	private List<GameObject> resultsPositions = new List<GameObject> ();
 
 	private bool replay;
@@ -38,6 +39,7 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
 		firstPosition = player.GetComponent<Ball> ().resultPanel.transform.position;
+		positionsSpace = enemy1.GetComponent<Ball> ().resultPanel.transform.position.y - firstPosition.y;
 
 		resultsPositions.Add (player);
 		resultsPositions.Add (enemy1);
@@ -61,7 +63,7 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 
 		for (int i = 0; i < resultsPositions.Count; ++i) {
 			resultsPositions [i].GetComponent<Ball> ().resultPanel.transform.position = Vector3.Lerp (resultsPositions [i].GetComponent<Ball> ().resultPanel.transform.position, 
-				new Vector3 (firstPosition.x, -90 * i + firstPosition.y, firstPosition.z),
+				new Vector3 (firstPosition.x, positionsSpace * i + firstPosition.y, firstPosition.z),
 				5f * Time.deltaTime);
 		}
 	}
