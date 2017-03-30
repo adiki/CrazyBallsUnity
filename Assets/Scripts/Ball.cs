@@ -46,6 +46,10 @@ public abstract class Ball : MonoBehaviour
 
 	void Move ()
 	{
+		if (rigidBody.position.y > 0.01) {
+			return;
+		}
+
 		Vector3 movement = Movement ();
 
 		rigidBody.AddForce (movement, ForceMode.Impulse);
