@@ -66,6 +66,11 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 				new Vector3 (firstPosition.x, positionsSpace * i + firstPosition.y, firstPosition.z),
 				5f * Time.deltaTime);
 		}
+
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			game.Paused = true;
+			animator.SetBool ("isPausePanelHidden", false);
+		}
 	}
 
 	void OnApplicationPause (bool paused)
