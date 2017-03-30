@@ -24,7 +24,7 @@ public class MapScreen : MonoBehaviour
 
 		for (int i = 1; i <= 15; ++i) {
 			for (int j = 1; j <= DataStore.starsForLevel (i); ++j) {
-				Image startImage = GameObject.FindGameObjectWithTag (i + "star" + j).GetComponent<Image> ();
+				Image startImage = GameObject.FindGameObjectWithTag ("level" + i + "star" + j).GetComponent<Image> ();
 				startImage.color = new Color(1f, 0.6f, 0f, 1f);
 			}
 		}
