@@ -10,8 +10,9 @@ public class MapScreen : MonoBehaviour
 	public GameObject scrollView;
 	public GameObject scrollViewContentView;
 
+	public static int lastPlayedLevel = 0;
+
 	private int levelToOpen;
-	private static float positionX = 0;
 
 	void Start ()
 	{
@@ -26,16 +27,18 @@ public class MapScreen : MonoBehaviour
 				startImage.color = new Color (1f, 0.6f, 0f, 1f);
 			}
 		}
-
-		if (positionX == 0) {
-			GameObject unlockedPanel = GameObject.FindGameObjectWithTag ("panel" + DataStore.unlockedLevelNumber ());
-			float posX = unlockedPanel.GetComponent<RectTransform> ().anchoredPosition.x - scrollView.GetComponent<RectTransform> ().rect.width / 2;
-			float x = Mathf.Min (Mathf.Max (-scrollViewContentView.GetComponent<RectTransform> ().rect.width + scrollView.GetComponent<RectTransform> ().rect.width, -posX), 0);
-			Rect rect = scrollViewContentView.GetComponent<RectTransform> ().rect;
-			scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (x, 0, 0);
+		int levelForAdjustingOffset;
+		if (lastPlayedLevel == 0) {
+			levelForAdjustingOffset = DataStore.unlockedLevelNumber ();
 		} else {
-			scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (positionX, 0, 0);
+			levelForAdjustingOffset = lastPlayedLevel;
 		}
+
+		GameObject unlockedPanel = GameObject.FindGameObjectWithTag ("panel" + levelForAdjustingOffset);
+		float posX = unlockedPanel.GetComponent<RectTransform> ().anchoredPosition.x - scrollView.GetComponent<RectTransform> ().rect.width / 2;
+		float x = Mathf.Min (Mathf.Max (-scrollViewContentView.GetComponent<RectTransform> ().rect.width + scrollView.GetComponent<RectTransform> ().rect.width, -posX), 0);
+		Rect rect = scrollViewContentView.GetComponent<RectTransform> ().rect;
+		scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition = new Vector3 (x, 0, 0);
 	}
 
 	void Update() 
@@ -50,8 +53,8 @@ public class MapScreen : MonoBehaviour
 
 	public void openLevel (int level)
 	{
+		lastPlayedLevel = level;
 		animator.SetBool ("isGameHidden", false);
-		positionX = scrollViewContentView.GetComponent<RectTransform> ().anchoredPosition.x;
 		levelToOpen = level;
 	}
 

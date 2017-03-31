@@ -26,6 +26,6 @@ public class Player : Ball
 			movement = new Vector3 (x2, 0.0f, z2);
 		}
 
-		return movement * 3f;
+		return movement * 4f;
 	}
 }

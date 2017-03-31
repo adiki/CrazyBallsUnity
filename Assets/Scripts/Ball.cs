@@ -13,7 +13,7 @@ public abstract class Ball : MonoBehaviour
 	public Vector3 velocityCached;
 	public Rigidbody rigidBody;
 	public List<Hit> lastHits = new List<Hit>();
-	public float movementFactor = 2;
+	public float movementFactor;
 
 	public int points;
 
@@ -78,7 +78,7 @@ public abstract class Ball : MonoBehaviour
 		float angle = Vector3.Angle (-normal, velocityCachedOther);
 		float appliedRecoil = Mathf.Max (0, (angle / 180 - 0.5f)) * 2;
 
-		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 3;
+		float factor = velocityCachedOther.magnitude * otherPlayer.rigidBody.mass / rigidBody.mass * 3.5f;
 		rigidBody.AddForce (normal * appliedRecoil * factor, ForceMode.Impulse);
 	}
 

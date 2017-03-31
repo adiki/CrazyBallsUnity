@@ -47,6 +47,8 @@ public abstract class Level : MonoBehaviour, GameDelegate {
 		resultsPositions.Add (enemy3);
 
 		game = new Game (this, gameTime (), player, enemy1, enemy2, enemy3);
+
+		MapScreen.lastPlayedLevel = levelNumber;
 	}
 
 	protected abstract int gameTime ();
